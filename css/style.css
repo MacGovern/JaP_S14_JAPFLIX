@@ -1,0 +1,45 @@
+.img-card-fit {
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+}
+
+.img-cont {
+    height: 200px;
+    overflow: hidden;
+    background-color: beige;
+}
+
+.card-content {
+    height: 150px;
+    overflow: auto;
+}
+
+main {
+    min-height: calc(100vh - 100px);
+}
+
+i.checked {
+    color: orange;
+}
+
+.offcanvas-top {
+    height: fit-content;
+}
+
+h5 {
+    color: white;
+}
+
+p {
+    color: gray;
+}
+
+.list-group-item {
+    background-color: #212529;
+    border-color: gray;
+}
+
+.fa-star {
+    color: white;
+}
