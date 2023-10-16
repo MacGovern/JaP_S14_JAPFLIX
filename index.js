@@ -1,17 +1,55 @@
-function removeDiacritics(str) { // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript (primera respuesta).
-    return str.normalize('NFD').replace(/\p{Diacritic}/gu, '');
-}
-
-function toggleOffCanvas(title, overview, genres) {
-    console.log(title, overview, genres);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    const inputBuscar = document.getElementById('inputBuscar');
-    const btnBuscar = document.getElementById('btnBuscar');
-    const lista = document.getElementById('lista');
+    function toggleOffcanvas(title, overview, genresArray, year, runtime, budget, revenue) {
+        document.getElementById('offcanvasTopLabel').textContent = title;
+        document.getElementById('offcanvasBody').innerHTML = `
+            <p>${overview}</p>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <p class="genres">${genresArray.join(' - ')}</p>
+                </div>
+                <div class="col-auto btn-group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        More
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-start">
+                        <li class="dropdown-item">
+                            <div class="row d-flex justify-content-between">
+                                <span class="col-auto pe-0">Year: </span>
+                                <span class="col-auto text-end ps-0">${year}</span>
+                            <div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="row d-flex justify-content-between">
+                                <span class="col-auto pe-0">Runtime: </span>
+                                <span class="col-auto text-end ps-0">${runtime} mins</span>
+                            <div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="row d-flex justify-content-between">
+                                <span class="col-auto pe-0">Budget: </span>
+                                <span class="col-auto text-end ps-0">$${budget}</span>
+                            <div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="row d-flex justify-content-between">
+                                <span class="col-auto pe-0">Revenue: </span>
+                                <span class="col-auto text-end ps-0">$${revenue}</span>
+                            <div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
 
-    btnBuscar.addEventListener('click', () => {
+    document.getElementById('btnBuscar').addEventListener('click', () => {
+        function removeDiacritics(str) { // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript (primera respuesta).
+            return str.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+        }
+
+        const lista = document.getElementById('lista');
+        const inputBuscar = document.getElementById('inputBuscar');
         const keyWord = removeDiacritics(inputBuscar.value).toLowerCase();
 
         function inGenres(film) {
@@ -32,8 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (removeDiacritics(film.title).toLowerCase().includes(keyWord) || removeDiacritics(film.overview).toLowerCase().includes(keyWord) || removeDiacritics(film.tagline).toLowerCase().includes(keyWord) || inGenres(film)) {
                         const li = document.createElement('li');
                         li.classList.add('list-group-item');
-                        console.log(film.genres.map(genre => genre.name));
-                        li.setAttribute('onclick', `toggleOffCanvas('${film.title}', '${film.overview}', '${film.genres.map(genre => genre.name)}')`);
+                        li.setAttribute('type', "button");
+                        li.setAttribute('data-bs-toggle', "offcanvas");
+                        li.setAttribute('data-bs-target', "#offcanvasTop");
+                        li.setAttribute('aria-controls', "offcanvasTop");
                         let stars = "";
                         for (let i = 1; i <= Math.round(film.vote_average / 2); i++)
                             stars += `<i class="checked fa fa-star"></i>`; // Estrella checked.
@@ -50,6 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>                            
                             <p class="fst-italic">${film.tagline}</p>                            
                         `;
+                        li.addEventListener('click', () => {
+                            toggleOffcanvas(film.title, film.overview, film.genres.map(genre => genre.name), film.release_date.substring(0, 4), film.runtime, film.budget, film.revenue);
+                        });
                         lista.appendChild(li);
                     }
                 });

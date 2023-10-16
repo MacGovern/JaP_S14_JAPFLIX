@@ -31,7 +31,8 @@ h5 {
     color: white;
 }
 
-p {
+.fst-italic,
+.genres {
     color: gray;
 }
 
@@ -42,4 +43,12 @@ p {
 
 .fa-star {
     color: white;
+}
+
+.btn-group {
+    position: static;
+}
+
+.dropdown-menu {
+    max-width: 205px;
 }
